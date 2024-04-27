@@ -1,6 +1,6 @@
 # Design Document
 
-By YOUR NAME HERE
+By Bryan Johns
 
 Video overview: <URL HERE>
 
