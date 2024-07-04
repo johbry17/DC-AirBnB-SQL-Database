@@ -16,7 +16,7 @@
 -- listing.license
 
 -- Two api routes:
--- /api/listings (This is just a SQL query that combines all the data INTO the listings table)
+-- /api/listings (This is just a SQL query that combines all the data INTO the listing table)
 -- /static/resources/neighbourhoods.geojson
 
 -- So, I pretty much have free latitude to do what I want!

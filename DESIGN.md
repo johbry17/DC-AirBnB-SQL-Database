@@ -66,7 +66,7 @@ In this section you should answer the following questions:
 
 
 
-!!!!! Create a view for the JavaScript map !!!!!!
+!!!!! Create a view for the JavaScript, and an index for neighborhoods !!!!!!
 
 
 
