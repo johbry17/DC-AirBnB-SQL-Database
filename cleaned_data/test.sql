@@ -8,7 +8,7 @@ SELECT
 FROM
     information_schema.columns
 WHERE
-    table_name = 'listings'
+    table_name = 'hosts'
 ORDER BY
     ordinal_position;
 	

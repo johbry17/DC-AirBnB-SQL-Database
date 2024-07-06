@@ -30,7 +30,9 @@ Query the stats of AirBnB's in Washington, DC. Find out how many are in which ne
 
 * What's beyond the scope of what a user should be able to do with your database?
 
-Book an actual AirBnB.
+Book an actual AirBnB. 
+
+Justify ignoring any data scrapped from the web here, like max/min nights.
 
 ## Representation
 
@@ -40,7 +42,7 @@ In this section you should answer the following questions:
 
 * Which entities will you choose to represent in your database?
 
-Listings, hosts, reviews, reviewers... pondering... I'll fill this in as I go along. A lot depends on the available data, and I'll decide what goes where afterwards. Make it lean. Keep only the essential data.
+Listings, hosts, neighborhoods, reviews, reviewers... pondering... I'll fill this in as I go along. A lot depends on the available data, and I'll decide what goes where afterwards. Make it lean. Keep only the essential data.
 
 * What attributes will those entities have?
 
@@ -64,11 +66,13 @@ In this section you should answer the following questions:
 
 * Which optimizations (e.g., indexes, views) did you create? Why?
 
+!!!!! Create a view for the JavaScript map, and an index for neighborhoods !!!!!!
 
+?Create views for plotly plots?
 
-!!!!! Create a view for the JavaScript, and an index for neighborhoods !!!!!!
+Make efficient queries for the webpage's api calls.
 
-
+I'm biased towards speed of query to load on the webpage. I will be the only one updating the database, and that infrequently, so the amount of time and complexity involved doesn't bother me. The amount of memory storage necessary is mostly inconsequential to me.
 
 ## Limitations
 
@@ -76,7 +80,9 @@ In this section you should answer the following questions:
 
 * What are the limitations of your design?
 
+It takes up more storage space, due to indexes for speed. I have to be the one to update it.
 
+Not really designed for create, update, delete - only read. CRUD disappointed.
 
 * What might your database not be able to represent very well?
 
