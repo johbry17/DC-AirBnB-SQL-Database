@@ -16,4 +16,4 @@ ORDER BY
 SELECT * FROM listings
 LEFT JOIN listing_description ON listings.listing_id = listing_description.id
 LEFT JOIN listing_reviews ON listings.listing_id = listing_reviews.listing_id
-LEFT JOIN hosts ON listings.listing_id = hosts.listing_id;
+LEFT JOIN hosts ON hosts.host_id = listings.host_id;

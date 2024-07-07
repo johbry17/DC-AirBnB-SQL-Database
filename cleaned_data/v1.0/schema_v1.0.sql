@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS reviews;
-DROP TABLE IF EXISTS hosts;
 DROP TABLE IF EXISTS min_max_night;
 DROP TABLE IF EXISTS availability;
 DROP TABLE IF EXISTS listing_reviews;
@@ -7,16 +6,7 @@ DROP TABLE IF EXISTS calculated_host_listings;
 Drop table IF EXISTS listing_description;
 DROP TABLE IF EXISTS calendar;
 DROP TABLE IF EXISTS listings;
-
-select* from reviews;
-select* from  hosts;
-select* from  min_max_night;
-select* from  availability;
-select* from  listing_reviews;
-select* from calculated_host_listings;
-select* from listing_description;
-select* from  listings;
-select* from calendar;
+DROP TABLE IF EXISTS hosts;
 
 CREATE TABLE hosts(
 	host_id BIGINT PRIMARY KEY,
@@ -36,7 +26,7 @@ CREATE TABLE hosts(
 	host_total_listings_count INT,
 	host_verifications VARCHAR,
 	host_has_profile_pic BOOLEAN,
-	host_identity_verified BOOLEAN,
+	host_identity_verified BOOLEAN
 );
 
 CREATE TABLE listings(
@@ -58,7 +48,7 @@ CREATE TABLE listings(
 	bedrooms varchar, 
 	beds decimal,
 	price decimal,
-	license VARCHAR,
+	license VARCHAR
 );
 
 CREATE TABLE reviews(
