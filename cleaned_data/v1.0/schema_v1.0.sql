@@ -61,7 +61,6 @@ CREATE TABLE reviews(
 	
 );
 
-
 CREATE TABLE min_max_night(
 	listing_id BIGINT PRIMARY KEY REFERENCES listings,
 	minimum_nights DECIMAL,
@@ -102,7 +101,6 @@ CREATE TABLE listing_reviews (
 	review_scores_value DECIMAL
 );
 
-
 CREATE TABLE calculated_host_listings(
 	listing_id BIGINT PRIMARY KEY REFERENCES listings,
 	calculated_host_listings_count INT,
@@ -119,15 +117,9 @@ CREATE TABLE listing_description(
 CREATE TABLE calendar (
 	num int PRIMARY KEY,
 	listing_id BIGINT REFERENCES listings,
-	date_a DATE,
+	date DATE,
 	available BOOLEAN,
 	price VARCHAR,
-	adjusted_price VARCHAR,
 	minimum_nights INT,
 	maximum_nights INT
 	);
-
-	
-	
-	
-	
