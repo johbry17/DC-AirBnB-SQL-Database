@@ -11,8 +11,14 @@ WHERE
     table_name = 'calendar'
 ORDER BY
     ordinal_position;
-	
-	select * from calendar;
+
+-- size of db
+SELECT pg_size_pretty(pg_database_size('dc-airbnb-v1.0')) AS database_size;
+
+vacuum full;
+
+-- list of tables in db
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';
 	
 -- The map's app.py query, with LEFT JOINs to make it function for now
 SELECT * FROM listings

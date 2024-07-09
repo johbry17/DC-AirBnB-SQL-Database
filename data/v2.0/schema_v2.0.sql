@@ -1,27 +1,34 @@
--- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
--- Link to schema: https://app.quickdatabasediagrams.com/#/d/YmTQEe
--- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
-
 -- drop min/max night? availability? reviews? calendar?
 -- above depends on data analysis
 -- move number_of_reviews into listings?
 -- index neighbourhood on listings
 -- create views for common queries, like map pop-up
 
+DROP TABLE IF EXISTS calendar;
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS listing_reviews;
+DROP TABLE IF EXISTS min_max_night;
+DROP TABLE IF EXISTS availability;
+DROP TABLE IF EXISTS listings_categorical;
+DROP TABLE IF EXISTS listings;
+DROP TABLE IF EXISTS neighbourhood;
+DROP TABLE IF EXISTS host_listings_count;
+DROP TABLE IF EXISTS hosts;
+
 CREATE TABLE "hosts" (
     "host_id" BIGINT   NOT NULL,
     "host_url" TEXT   NOT NULL,
     "host_name" TEXT   NOT NULL,
     "host_since" DATE   NOT NULL,
-    "host_location" TEXT   NOT NULL,
-    "host_about" TEXT   NOT NULL,
-    "host_response_time" TEXT   NOT NULL,
-    "host_response_rate" TEXT   NOT NULL,
-    "host_acceptance_rate" TEXT   NOT NULL,
+    "host_location" TEXT,
+    "host_about" TEXT,
+    "host_response_time" TEXT,
+    "host_response_rate" FLOAT,
+    "host_acceptance_rate" FLOAT,
     "host_is_superhost" BOOLEAN   NOT NULL,
     "host_thumbnail_url" TEXT   NOT NULL,
     "host_picture_url" TEXT   NOT NULL,
-    "host_neighbourhood" TEXT   NOT NULL,
+    "host_neighbourhood" TEXT,
     "host_listings_count" INT   NOT NULL,
     "host_total_listings_count" INT   NOT NULL,
     "host_verifications" TEXT   NOT NULL,
@@ -40,6 +47,14 @@ CREATE TABLE "host_listings_count" (
     "host_listings_shared_rooms_count" INT   NOT NULL,
     CONSTRAINT "pk_host_listings_count" PRIMARY KEY (
         "host_id"
+     )
+);
+
+CREATE TABLE "neighbourhood" (
+    "neighbourhood_id" serial   NOT NULL,
+    "neighbourhood_cleansed" TEXT   NOT NULL,
+    CONSTRAINT "pk_neighbourhood" PRIMARY KEY (
+        "neighbourhood_id"
      )
 );
 
@@ -102,14 +117,6 @@ CREATE TABLE "min_max_night" (
     "maximum_nights_avg_ntm" DECIMAL   NOT NULL,
     CONSTRAINT "pk_min_max_night" PRIMARY KEY (
         "listing_id"
-     )
-);
-
-CREATE TABLE "neighbourhood" (
-    "neighbourhood_id" serial   NOT NULL,
-    "neighbourhood_cleansed" TEXT   NOT NULL,
-    CONSTRAINT "pk_neighbourhood" PRIMARY KEY (
-        "neighbourhood_id"
      )
 );
 
