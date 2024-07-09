@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS min_max_night;
 DROP TABLE IF EXISTS availability;
 DROP TABLE IF EXISTS listings_categorical;
 DROP TABLE IF EXISTS listings;
-DROP TABLE IF EXISTS neighbourhood;
+DROP TABLE IF EXISTS neighbourhoods;
 DROP TABLE IF EXISTS host_listings_count;
 DROP TABLE IF EXISTS hosts;
 
@@ -50,9 +50,9 @@ CREATE TABLE "host_listings_count" (
      )
 );
 
-CREATE TABLE "neighbourhood" (
+CREATE TABLE "neighbourhoods" (
     "neighbourhood_id" serial   NOT NULL,
-    "neighbourhood_cleansed" TEXT   NOT NULL,
+    "neighbourhood" TEXT   NOT NULL,
     CONSTRAINT "pk_neighbourhood" PRIMARY KEY (
         "neighbourhood_id"
      )
@@ -171,7 +171,7 @@ ALTER TABLE "listings" ADD CONSTRAINT "fk_listings_host_id" FOREIGN KEY("host_id
 REFERENCES "hosts" ("host_id");
 
 ALTER TABLE "listings" ADD CONSTRAINT "fk_listings_neighberhood_id" FOREIGN KEY("neighberhood_id")
-REFERENCES "neighbourhood" ("neighbourhood_id");
+REFERENCES "neighbourhoods" ("neighbourhood_id");
 
 ALTER TABLE "listings_categorical" ADD CONSTRAINT "fk_listings_categorical_listing_id" FOREIGN KEY("listing_id")
 REFERENCES "listings" ("listing_id");
