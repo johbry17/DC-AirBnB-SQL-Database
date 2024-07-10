@@ -75,25 +75,25 @@ CREATE TABLE "listings" (
 );
 
 CREATE TABLE "listings_categorical" (
-    "listing_id" int   NOT NULL,
+    "listing_id" bigint   NOT NULL,
     "listing_name" TEXT   NOT NULL,
-    "hover_description" TEXT   NOT NULL,
-    "description" TEXT   NOT NULL,
+    "hover_description" TEXT,
+    "description" TEXT,
     "listing_url" TEXT   NOT NULL,
-    "neighborhood_overview" TEXT   NOT NULL,
+    "neighborhood_overview" TEXT,
     "picture_url" TEXT   NOT NULL,
     "property_type" TEXT   NOT NULL,
     "room_type" TEXT   NOT NULL,
     "amenities" TEXT   NOT NULL,
-    "bathrooms_text" TEXT   NOT NULL,
-    "license" TEXT   NOT NULL,
+    "bathrooms_text" TEXT,
+    "license" TEXT,
     CONSTRAINT "pk_listings_categorical" PRIMARY KEY (
         "listing_id"
      )
 );
 
 CREATE TABLE "availability" (
-    "id_listing" BIGINT   NOT NULL,
+    "listing_id" BIGINT   NOT NULL,
     "has_availability" BOOLEAN   NOT NULL,
     "availability_30" INT   NOT NULL,
     "availability_60" INT   NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE "availability" (
     "calendar_last_scraped" DATE   NOT NULL,
     "instant_bookable" BOOLEAN   NOT NULL,
     CONSTRAINT "pk_availability" PRIMARY KEY (
-        "id_listing"
+        "listing_id"
      )
 );
 
@@ -177,7 +177,7 @@ REFERENCES "neighbourhoods" ("neighbourhood_id");
 ALTER TABLE "listings_categorical" ADD CONSTRAINT "fk_listings_categorical_listing_id" FOREIGN KEY("listing_id")
 REFERENCES "listings" ("listing_id");
 
-ALTER TABLE "availability" ADD CONSTRAINT "fk_availability_id_listing" FOREIGN KEY("id_listing")
+ALTER TABLE "availability" ADD CONSTRAINT "fk_availability_listing_id" FOREIGN KEY("listing_id")
 REFERENCES "listings" ("listing_id");
 
 ALTER TABLE "min_max_night" ADD CONSTRAINT "fk_min_max_night_listing_id" FOREIGN KEY("listing_id")
