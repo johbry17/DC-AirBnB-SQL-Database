@@ -61,12 +61,12 @@ CREATE TABLE "neighbourhoods" (
 CREATE TABLE "listings" (
     "listing_id" BIGINT   NOT NULL,
     "host_id" int   NOT NULL,
-    "neighberhood_id" int   NOT NULL,
+    "neighbourhood_id" int   NOT NULL,
     "latitude" FLOAT   NOT NULL,
     "longitude" FLOAT   NOT NULL,
-    "bathrooms" decimal   NOT NULL,
-    "bedrooms" decimal   NOT NULL,
-    "beds" decimal   NOT NULL,
+    "bathrooms" decimal,
+    "bedrooms" decimal,
+    "beds" decimal,
     "price" decimal   NOT NULL,
     CONSTRAINT "pk_listings" PRIMARY KEY (
         "listing_id"
@@ -170,7 +170,7 @@ REFERENCES "hosts" ("host_id");
 ALTER TABLE "listings" ADD CONSTRAINT "fk_listings_host_id" FOREIGN KEY("host_id")
 REFERENCES "hosts" ("host_id");
 
-ALTER TABLE "listings" ADD CONSTRAINT "fk_listings_neighberhood_id" FOREIGN KEY("neighberhood_id")
+ALTER TABLE "listings" ADD CONSTRAINT "fk_listings_neighbourhood_id" FOREIGN KEY("neighbourhood_id")
 REFERENCES "neighbourhoods" ("neighbourhood_id");
 
 ALTER TABLE "listings_categorical" ADD CONSTRAINT "fk_listings_categorical_listing_id" FOREIGN KEY("listing_id")
