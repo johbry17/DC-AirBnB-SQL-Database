@@ -64,6 +64,7 @@ CREATE TABLE "listings" (
     "neighbourhood_id" int   NOT NULL,
     "latitude" FLOAT   NOT NULL,
     "longitude" FLOAT   NOT NULL,
+    "accommodates" INT   NOT NULL,
     "bathrooms" decimal,
     "bedrooms" decimal,
     "beds" decimal,
@@ -83,7 +84,7 @@ CREATE TABLE "listings_categorical" (
     "picture_url" TEXT   NOT NULL,
     "property_type" TEXT   NOT NULL,
     "room_type" TEXT   NOT NULL,
-    "accommodates" TEXT   NOT NULL,
+    "amenities" TEXT   NOT NULL,
     "bathrooms_text" TEXT   NOT NULL,
     "license" TEXT   NOT NULL,
     CONSTRAINT "pk_listings_categorical" PRIMARY KEY (
