@@ -126,29 +126,30 @@ CREATE TABLE "listing_reviews" (
     "number_of_reviews" INT   NOT NULL,
     "number_of_reviews_ltm" INT   NOT NULL,
     "number_of_reviews_l30d" INT   NOT NULL,
-    "first_review" DATE   NOT NULL,
-    "last_review" DATE   NOT NULL,
-    "review_scores_rating" DECIMAL   NOT NULL,
-    "review_scores_accuracy" DECIMAL   NOT NULL,
-    "review_scores_cleanliness" DECIMAL   NOT NULL,
-    "review_scores_checkin" DECIMAL   NOT NULL,
-    "review_scores_communication" DECIMAL   NOT NULL,
-    "review_scores_location" DECIMAL   NOT NULL,
-    "reviews_per_month" DECIMAL   NOT NULL,
-    "review_scores_value" DECIMAL   NOT NULL,
+    "first_review" DATE,
+    "last_review" DATE,
+    "review_scores_rating" DECIMAL,
+    "review_scores_accuracy" DECIMAL,
+    "review_scores_cleanliness" DECIMAL,
+    "review_scores_checkin" DECIMAL,
+    "review_scores_communication" DECIMAL,
+    "review_scores_location" DECIMAL,
+    "reviews_per_month" DECIMAL,
+    "review_scores_value" DECIMAL,
     CONSTRAINT "pk_listing_reviews" PRIMARY KEY (
         "listing_id"
      )
 );
 
 CREATE TABLE "reviews" (
+	"review_id" BIGINT   NOT NULL,    
     "listing_id" BIGINT   NOT NULL,
     "review_date" DATE   NOT NULL,
     "reviewer_id" BIGINT   NOT NULL,
-    "reviewer_name" TEXT   NOT NULL,
-    "review_comments" TEXT   NOT NULL,
+    "reviewer_name" TEXT,
+    -- "review_comments" TEXT   NOT NULL,
     CONSTRAINT "pk_reviews" PRIMARY KEY (
-        "listing_id"
+        "review_id"
      )
 );
 
