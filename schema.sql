@@ -14,6 +14,7 @@
 -- listing.host_identity_verified
 -- listing.host_total_listings_count
 -- listing.license
+-- listing.neighbourhood
 
 -- Two api routes:
 -- /api/listings (This is just a SQL query that combines all the data INTO the listing table)

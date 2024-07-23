@@ -4,6 +4,7 @@
 -- index neighbourhood on listings
 -- create views for common queries, like map pop-up
 
+DROP VIEW IF EXISTS map_listings;
 DROP TABLE IF EXISTS calendar;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS listing_reviews;
@@ -193,3 +194,28 @@ REFERENCES "listing_reviews" ("listing_id");
 ALTER TABLE "calendar" ADD CONSTRAINT "fk_calendar_listing_id" FOREIGN KEY("listing_id")
 REFERENCES "listings" ("listing_id");
 
+CREATE VIEW map_listings AS
+SELECT 
+    l.latitude,
+    l.longitude,
+    lc.hover_description,
+    lc.listing_url,
+    l.price,
+    lc.property_type,
+    l.accommodates,
+    lr.review_scores_rating,
+    h.host_name,
+    h.host_identity_verified,
+    h.host_total_listings_count,
+    lc.license,
+    n.neighbourhood
+FROM 
+    listings l
+JOIN 
+    listings_categorical lc ON l.listing_id = lc.listing_id
+JOIN 
+    listing_reviews lr ON l.listing_id = lr.listing_id
+JOIN 
+    hosts h ON l.host_id = h.host_id
+JOIN
+    neighbourhoods n ON l.neighbourhood_id = n.neighbourhood_id;
