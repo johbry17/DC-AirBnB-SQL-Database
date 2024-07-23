@@ -50,9 +50,11 @@ Listings, hosts, neighborhoods, reviews, reviewers... pondering... I'll fill thi
 
 * Why did you choose the types you did?
 
-
+Text, so it can be variable length to conserve hard disk storage.
 
 * Why did you choose the constraints you did?
+
+Often removed NULL constraint, to preserve more data, at least until I decide what to do with it.
 
 
 
@@ -73,6 +75,8 @@ In this section you should answer the following questions:
 Make efficient queries for the webpage's api calls.
 
 I'm biased towards speed of query to load on the webpage. I will be the only one updating the database, and that infrequently, so the amount of time and complexity involved doesn't bother me. The amount of memory storage necessary is mostly inconsequential to me.
+
+Refrained from keeping comments - text drastically increased storage, adding almost 50% (90MB on top of 206MB). Saves on hard disk space and (presumably) speed of accessing db. 
 
 ## Limitations
 

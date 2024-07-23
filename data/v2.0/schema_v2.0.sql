@@ -68,7 +68,7 @@ CREATE TABLE "listings" (
     "bathrooms" decimal,
     "bedrooms" decimal,
     "beds" decimal,
-    "price" decimal   NOT NULL,
+    "price" decimal,
     CONSTRAINT "pk_listings" PRIMARY KEY (
         "listing_id"
      )
