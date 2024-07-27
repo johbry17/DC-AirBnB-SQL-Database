@@ -78,23 +78,17 @@ In this section you should answer the following questions:
 
 * Which optimizations (e.g., indexes, views) did you create? Why?
 
-!!!!! Create a view for the JavaScript map, and an index for neighborhoods !!!!!!
+In the acronym of CRUD, I am functionally only interested in the 'R'. I'm biased towards speed of query results, as the data is being used to load a webpage. I will be the only one updating the database, and that infrequently, so the amount of time and complexity involved in updating doesn't bother me. I will keep a modest eye on the amount of hard disk memory storage taken up, but even that is mostly inconsequential to me.
 
-New 2.0 db view map_listings returns in 110-150 msec, vs. 500 msec for v1.0 db
+Of course, having mentioned hard disk space as being mostly inconsequential to my needs, I deliberately excluded the actual review comments from the database. The text drastically increased storage space, adding almost 50% (90MB on top of 208MB). This saves on hard disk space and (presumably) speed of accessing the database on the reviews table. 
 
-index on host_id and neighbourhood_id to speed joins
+I partitioned off a lot of the listings data into separate categories to speed runtime. I created two tables for common numerical and categorical data, and then several other tables for less frequently accessed data.
 
-Index lat_long to speed loading of map markers
+The view `map_listings` created in the schema contains all of the fields necessary to populate a JavaScript map of the AirBnB's in DC, and also displaying some basic information at the neighbourhood level. This view returns data in 110-150 msec, vs. ~500 msec for v1.0 queries, cutting query time by at least a third.
 
-Split off categorical data from listings into separate table.
-
-?Create views for plotly plots?
+To optimize joins, I built `idx_host_id` and `idx_neighbourhood_id` on the listings table, for the only columns used in making joins that aren't already primary keys. Using an index for purposes other than speeding joins, I built the `idx_lat_long` to optimize load time of the map, which has a marker for every listing.
 
 Make efficient queries for the webpage's api calls.
-
-I'm biased towards speed of query to load on the webpage. I will be the only one updating the database, and that infrequently, so the amount of time and complexity involved doesn't bother me. The amount of memory storage necessary is mostly inconsequential to me.
-
-Refrained from keeping comments - text drastically increased storage, adding almost 50% (90MB on top of 206MB). Saves on hard disk space and (presumably) speed of accessing db. 
 
 ## Limitations
 
@@ -102,9 +96,14 @@ In this section you should answer the following questions:
 
 * What are the limitations of your design?
 
-It takes up more storage space, due to indexes for speed. I have to be the one to update it.
+It takes up slightly more storage space, due to indexes. 
+
+One big flaw is that it has to be updated manually, although much of that is automated.
 
 Not really designed for create, update, delete - only read. CRUD disappointed.
 
+Entirely static. Not dynamic. No realtime updates. Assumes listings and hosts do not change.
+
 * What might your database not be able to represent very well?
 
+Nothing realtime, like responding to changes in bookings.
