@@ -20,6 +20,10 @@ A plethora of information related to AirBnB listings, such as location, bed(/bat
 
 This is a great question, but the reality is: anything not already in the data set. The maximum scope is pre-determined. But, I shall whittle away at the data collected and make note of it here, and set the minimum scope.
 
+Information about renters. I have none. I can estimate demand, but know no demographics.
+
+I know nothing about neighborhood features (well, the database doesn't).
+
 ## Functional Requirements
 
 In this section you should answer the following questions:
@@ -31,6 +35,10 @@ Query the stats of AirBnB's in Washington, DC. Find out how many are in which ne
 * What's beyond the scope of what a user should be able to do with your database?
 
 Book an actual AirBnB. 
+
+See current stats. It only updates as often as I chose to.
+
+Change over time, although I may choose to continue to update this as new data is released.
 
 Justify ignoring any data scrapped from the web here, like max/min nights.
 
@@ -62,6 +70,8 @@ Often removed NULL constraint, to preserve more data, at least until I decide wh
 
 In this section you should include your entity relationship diagram and describe the relationships between the entities in your database.
 
+![Entity Relationship Diagram](./ERD.png)
+
 ## Optimizations
 
 In this section you should answer the following questions:
@@ -75,6 +85,8 @@ New 2.0 db view map_listings returns in 110-150 msec, vs. 500 msec for v1.0 db
 index on host_id and neighbourhood_id to speed joins
 
 Index lat_long to speed loading of map markers
+
+Split off categorical data from listings into separate table.
 
 ?Create views for plotly plots?
 
