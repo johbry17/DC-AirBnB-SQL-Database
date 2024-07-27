@@ -1,12 +1,10 @@
 SELECT pg_size_pretty(pg_database_size('dc-airbnb-2.0')) AS database_size;
 
-SELECT pg_size_pretty(pg_relation_size('reviews')) AS table_size;
+SELECT pg_size_pretty(pg_relation_size('calendar')) AS table_size;
 
 vacuum;
 
 vacuum full;
-
-select * from reviews;
 
 
 SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';
@@ -27,7 +25,7 @@ WHERE
 ORDER BY
     ordinal_position;
 	
-	select * from calendar;
+
 	
 -- The map's app.py query, with LEFT JOINs to make it function for now
 SELECT * FROM listings

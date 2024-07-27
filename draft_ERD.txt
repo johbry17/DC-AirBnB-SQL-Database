@@ -1,125 +1,120 @@
-# drop min/max night? availability? reviews? calendar?
-# above depends on data analysis
-# move number_of_reviews into listings?
-# index neighbourhood on listings
-# create views for common queries, like map pop-up
-
-hosts
+"hosts"
 --
-host_id BIGINT PK
-host_url TEXT
-host_name TEXT
-host_since DATE
-host_location TEXT
-host_about TEXT
-host_response_time TEXT
-host_response_rate FLOAT
-host_acceptance_rate FLOAT
-host_is_superhost BOOLEAN
-host_thumbnail_url TEXT
-host_picture_url TEXT
-host_neighbourhood TEXT
-host_listings_count INT
-host_total_listings_count INT
-host_verifications TEXT
-host_has_profile_pic BOOLEAN
-host_identity_verified BOOLEAN
+"host_id" BIGINT
+"host_url" TEXT
+"host_name" TEXT
+"host_since" DATE
+"host_location" TEXT NULL
+"host_about" TEXT NULL
+"host_response_time" TEXT NULL
+"host_response_rate" FLOAT NULL
+"host_acceptance_rate" FLOAT NULL
+"host_is_superhost" BOOLEAN
+"host_thumbnail_url" TEXT
+"host_picture_url" TEXT
+"host_neighbourhood" TEXT NULL
+"host_listings_count" INT
+"host_total_listings_count" INT
+"host_verifications" TEXT
+"host_has_profile_pic" BOOLEAN
+"host_identity_verified" BOOLEAN
 
-host_listings_count
+"host_listings_count"
 --
-host_id BIGINT PK FK - hosts.host_id
-host_listings_total_count INT
-host_listings_entire_homes_count INT
-host_listings_private_rooms_count INT
-host_listings_shared_rooms_count INT
+"host_id" BIGINT FK >- "hosts"."host_id"
+"host_listings_total_count" INT
+"host_listings_entire_homes_count" INT
+"host_listings_private_rooms_count" INT
+"host_listings_shared_rooms_count" INT
 
-neighbourhoods
+"neighbourhoods"
 --
-neighbourhood_id PK serial
-neighbourhood TEXT
+"neighbourhood_id" serial
+"neighbourhood" TEXT
 
-listings
+"listings"
 --
-listing_id BIGINT PK
-host_id int FK - hosts.host_id
-neighbourhood_id int FK - neighbourhoods.neighbourhood_id
-latitude FLOAT
-longitude FLOAT
-accommodates INT
-bathrooms decimal
-bedrooms decimal
-beds decimal
-price decimal
+"listing_id" BIGINT
+"host_id" int FK >- "hosts"."host_id"
+"neighbourhood_id" int FK >- "neighbourhoods"."neighbourhood_id"
+"latitude" FLOAT
+"longitude" FLOAT
+"accommodates" INT
+"bathrooms" decimal NULL
+"bedrooms" decimal NULL
+"beds" decimal NULL
+"price" decimal
 
-listings_categorical
+"listings_categorical"
 --
-listing_id int PK FK - listings.listing_id
-listing_name TEXT
-hover_description TEXT
-description TEXT
-listing_url TEXT
-neighborhood_overview TEXT
-picture_url TEXT
-property_type TEXT
-room_type TEXT
-amenities TEXT
-bathrooms_text TEXT
-license TEXT
+"listing_id" bigint FK >- "listings"."listing_id"
+"listing_name" TEXT
+"hover_description" TEXT NULL
+"description" TEXT NULL
+"listing_url" TEXT
+"neighborhood_overview" TEXT NULL
+"picture_url" TEXT
+"property_type" TEXT
+"room_type" TEXT
+"amenities" TEXT
+"bathrooms_text" TEXT NULL
+"license" TEXT NULL
 
-availability
+"availability"
 --
-id_listing BIGINT PK FK - listings.listing_id
-has_availability BOOLEAN
-availability_30 INT
-availability_60 INT
-availability_90 INT
-availability_365 INT
-calendar_last_scraped DATE
-instant_bookable BOOLEAN
+"listing_id" BIGINT FK >- "listings"."listing_id"
+"has_availability" BOOLEAN
+"availability_30" INT
+"availability_60" INT
+"availability_90" INT
+"availability_365" INT
+"calendar_last_scraped" DATE
+"instant_bookable" BOOLEAN
 
-min_max_night
+"min_max_night"
 --
-listing_id BIGINT PK FK - listings.listing_id
-minimum_nights DECIMAL
-maximum_nights DECIMAL
-minimum_minimum_nights DECIMAL
-maximum_minimum_nights DECIMAL
-minimum_maximum_nights DECIMAL
-maximum_maximum_nights DECIMAL
-minimum_nights_avg_ntm DECIMAL
-maximum_nights_avg_ntm DECIMAL
+"listing_id" BIGINT FK >- "listings"."listing_id"
+"minimum_nights" DECIMAL
+"maximum_nights" DECIMAL
+"minimum_minimum_nights" DECIMAL
+"maximum_minimum_nights" DECIMAL
+"minimum_maximum_nights" DECIMAL
+"maximum_maximum_nights" DECIMAL
+"minimum_nights_avg_ntm" DECIMAL
+"maximum_nights_avg_ntm" DECIMAL
 
-listing_reviews
+"listing_reviews"
 --
-listing_id BIGINT PK FK - listings.listing_id
-number_of_reviews INT
-number_of_reviews_ltm INT
-number_of_reviews_l30d INT
-first_review DATE
-last_review DATE
-review_scores_rating DECIMAL
-review_scores_accuracy DECIMAL
-review_scores_cleanliness DECIMAL
-review_scores_checkin DECIMAL
-review_scores_communication DECIMAL
-review_scores_location DECIMAL
-reviews_per_month DECIMAL
-review_scores_value DECIMAL
+"listing_id" BIGINT FK >- "listings"."listing_id"
+"number_of_reviews" INT
+"number_of_reviews_ltm" INT
+"number_of_reviews_l30d" INT
+"first_review" DATE NULL
+"last_review" DATE NULL
+"review_scores_rating" DECIMAL NULL
+"review_scores_accuracy" DECIMAL NULL
+"review_scores_cleanliness" DECIMAL NULL
+"review_scores_checkin" DECIMAL NULL
+"review_scores_communication" DECIMAL NULL
+"review_scores_location" DECIMAL NULL
+"reviews_per_month" DECIMAL NULL
+"review_scores_value" DECIMAL NULL
 
-reviews
+"reviews"
 --
-review_id BIGINT PK
-listing_id BIGINT FK - listing_reviews.listing_id
-review_date DATE
-reviewer_id BIGINT 
-reviewer_name TEXT
+"review_id" BIGINT
+"listing_id" BIGINT FK >- "listing_reviews"."listing_id"
+"review_date" DATE
+"reviewer_id" BIGINT
+"reviewer_name" TEXT NULL
+#  "review_comments" TEXT   NOT NULL,
 
-calendar
+"calendar"
 --
-id PK serial
-listing_id BIGINT FK >- listings.listing_id
-date DATE
-available BOOLEAN
-price decimal
-minimum_nights INT
-maximum_nights INT
+"id" serial
+"listing_id" BIGINT FK >- "listings"."listing_id"
+"date" DATE
+"available" BOOLEAN
+"price" decimal
+"minimum_nights" INT
+"maximum_nights" INT

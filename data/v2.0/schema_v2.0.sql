@@ -1,9 +1,10 @@
 -- drop min/max night? availability? reviews? calendar?
--- above depends on data analysis
 -- move number_of_reviews into listings?
--- index neighbourhood on listings
--- create views for common queries, like map pop-up
+-- additional indexes on price, review_scores_rating, etc.?
 
+DROP INDEX IF EXISTS idx_lat_long;
+DROP INDEX IF EXISTS idx_neighbourhood_id;
+DRoP INDEX IF EXISTS idx_host_id;
 DROP VIEW IF EXISTS map_listings;
 DROP TABLE IF EXISTS calendar;
 DROP TABLE IF EXISTS reviews;
@@ -69,7 +70,7 @@ CREATE TABLE "listings" (
     "bathrooms" decimal,
     "bedrooms" decimal,
     "beds" decimal,
-    "price" decimal,
+    "price" decimal  NOT NULL,
     CONSTRAINT "pk_listings" PRIMARY KEY (
         "listing_id"
      )
@@ -219,3 +220,11 @@ JOIN
     hosts h ON l.host_id = h.host_id
 JOIN
     neighbourhoods n ON l.neighbourhood_id = n.neighbourhood_id;
+
+CREATE INDEX idx_host_id ON listings(host_id);
+
+CREATE INDEX idx_neighbourhood_id ON listings(neighbourhood_id);
+
+CREATE INDEX idx_lat_long ON listings(latitude, longitude);
+
+

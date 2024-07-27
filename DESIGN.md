@@ -70,7 +70,11 @@ In this section you should answer the following questions:
 
 !!!!! Create a view for the JavaScript map, and an index for neighborhoods !!!!!!
 
-New 2.0 db view map_listings returns in ~170 msec, vs. 500 msec for v1.0 db
+New 2.0 db view map_listings returns in 110-150 msec, vs. 500 msec for v1.0 db
+
+index on host_id and neighbourhood_id to speed joins
+
+Index lat_long to speed loading of map markers
 
 ?Create views for plotly plots?
 
