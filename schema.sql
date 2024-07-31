@@ -194,7 +194,7 @@ ALTER TABLE "listing_reviews" ADD CONSTRAINT "fk_listing_reviews_listing_id" FOR
 REFERENCES "listings" ("listing_id");
 
 ALTER TABLE "reviews" ADD CONSTRAINT "fk_reviews_listing_id" FOREIGN KEY("listing_id")
-REFERENCES "listing_reviews" ("listing_id");
+REFERENCES "listings" ("listing_id");
 
 ALTER TABLE "calendar" ADD CONSTRAINT "fk_calendar_listing_id" FOREIGN KEY("listing_id")
 REFERENCES "listings" ("listing_id");

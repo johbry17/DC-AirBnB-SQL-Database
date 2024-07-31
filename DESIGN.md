@@ -10,8 +10,7 @@ In this section you should answer the following questions:
 
 * What is the purpose of your database?
 
-The database is for managing and analyzing data on AirBnB lisitngs in Washington, DC.
-It's for use in a Jupyter notebook exploratory data analysis, a Tableau explanatory data analysis, and a web dashboard. I built it in PostgreSQL. It contains the data necessary for a JavaScript map in the web dashboard. It supports functionalities like viewing the individual listings on a map, understanding host behavior, and analyzing reviews, availability, and pricing.
+Data analysis. The database is for managing and analyzing data on AirBnB listings in Washington, DC. It's for use in a Jupyter notebook exploratory data analysis, a Tableau explanatory data analysis, and a web dashboard. I built it in PostgreSQL. It contains the data necessary for a JavaScript map in the web dashboard. It supports functionalities like viewing the individual listings on a map, understanding host behavior, and analyzing reviews, availability, and pricing. As such, it will be read-only for the general user, with myself commiting any updates.
 
 * Which people, places, things, etc. are you including in the scope of your database?
 
@@ -27,7 +26,7 @@ It's for use in a Jupyter notebook exploratory data analysis, a Tableau explanat
 
 * Which people, places, things, etc. are *outside* the scope of your database?
 
-AirBnB users who are not hosts, which I assume are guests - vacationers, business travelers, etc. I lack any detailed information about guests beyond reviews and reviewer names.
+AirBnB users who are not hosts, which I assume are guests - vacationers, business travelers, etc. I lack any detailed information about guests beyond reviews and reviewer names. This also includes AirBnB administrators / employees, and people who may have profiles but don't rent out spaces, like property maintenance staff and cleaners.
 
 Listings outside of Washington, DC. This has a local focus on one city, and cannot contribute to a larger analysis of AirBnB on a country or global basis.
 
@@ -41,17 +40,25 @@ In this section you should answer the following questions:
 
 * What should a user be able to do with your database?
 
-Query the stats of AirBnB's in Washington, DC. Find out how many are in which neighborhood, and what kind of rental ("Full home"? "Private Room"?). It's for data analysis.
+Viewings lisiting on a map with detailed information (e.g., price, property type, host info).
+
+Use the web dashboard to see stats on AirBnB's in DC and at the neighbourhood level.
+
+View exploratory and explanatory data analyses in Jupyter and Tableau.
+
+Conduct their own analysis on listings and their attributes.
+
+Access review and availability statistics.
+
+Basically, data analysis on hosts and listings.
 
 * What's beyond the scope of what a user should be able to do with your database?
 
-Book an actual AirBnB. 
+Book an actual AirBnB. In fact, there is no real-time info. The database is a snapshot in time, last scraped in June of 2024.
 
-See current stats. It only updates as often as I chose to.
+No information of transaction history. I don't know who rented what, when.
 
-Change over time, although I may choose to continue to update this as new data is released.
-
-Justify ignoring any data scrapped from the web here, like max/min nights.
+No user-specific features. It can't be customized depending upon a user's preferences.
 
 ## Representation
 
@@ -61,7 +68,7 @@ In this section you should answer the following questions:
 
 * Which entities will you choose to represent in your database?
 
-Listings, hosts, neighborhoods, reviews, reviewers... pondering... I'll fill this in as I go along. A lot depends on the available data, and I'll decide what goes where afterwards. Make it lean. Keep only the essential data.
+
 
 * What attributes will those entities have?
 
@@ -69,19 +76,39 @@ Listings, hosts, neighborhoods, reviews, reviewers... pondering... I'll fill thi
 
 * Why did you choose the types you did?
 
-Text, so it can be variable length to conserve hard disk storage.
+Data types were chosen to accurately represent each attribute, like FLOAT for `price` and `latitude`/`longitude`, or BOOLEAN for binary attributes, like `availability` and `host_identity_verified`. I used TEXT for strings, so it can be of variable length to conserve hard disk storage. I used BIGINT, as many of the numbers were large and needed extra hard disk space.
 
 * Why did you choose the constraints you did?
 
-Often removed NULL constraint, to preserve more data, at least until I decide what to do with it.
+Primary Keys to ensure uniqueness of each entity. Also because they are essential for each table.
 
+Foreign keys to establish relationships between the entities.
 
+The only other constraint I used was `NOT NULL`, to ensure some required fields were filled, like `price`. The Primary Keys ensured uniqueness enough for each entity. The only default value I had to set was created in Python (for price, based on the neighbourhood median). Check constraints were unnecessary.
 
 ### Relationships
 
 In this section you should include your entity relationship diagram and describe the relationships between the entities in your database.
 
 ![Entity Relationship Diagram](./ERD.png)
+
+Hosts to Listings - One-to-Many (`host_id`)
+
+Hosts to Host_Listings_Count - One-to-One (`host_id`)
+
+Neighbourhoods to Listings - One-to-Many (`neighbourhood_id`)
+
+Listings to Listings_Categorical - One-to-One (`listing_id`)
+
+Listings to Availability - One-to-One (`listing_id`)
+
+Listings to Min_Max_Night - One-to-One (`listing_id`)
+
+Listings to Listing_Reviews - One-to-One (`listing_id`)
+
+Listings to Reviews - One-to-Many (`listing_id`)
+
+Listings to Calendar - One-to-Many (`listing_id`)
 
 ## Optimizations
 
@@ -91,15 +118,15 @@ In this section you should answer the following questions:
 
 In the acronym of CRUD, I am functionally only interested in the 'R'. I'm biased towards speed of query results, as the data is being used to load a webpage. I will be the only one updating the database, and that infrequently, so the amount of time and complexity involved in updating doesn't bother me. I will keep a modest eye on the amount of hard disk memory storage taken up, but even that is mostly inconsequential to me.
 
-Of course, having mentioned hard disk space as being mostly inconsequential to my needs, I deliberately excluded the actual review comments from the database. The text drastically increased storage space, adding almost 50% (90MB on top of 208MB). This saves on hard disk space and (presumably) speed of accessing the database on the reviews table. 
+I partitioned off a lot of the listings data into separate categories to speed runtime. I created two tables for common numerical and categorical data, and then several other tables for less frequently accessed data (availaiblity, minimum and maximum night, aggregate review statistics).
 
-I partitioned off a lot of the listings data into separate categories to speed runtime. I created two tables for common numerical and categorical data, and then several other tables for less frequently accessed data.
+The view `map_listings` created in the schema contains all of the fields necessary to populate a JavaScript map of the AirBnB's in DC, and also displaying some basic information at the neighbourhood level. This view returns data in 110-150 msec, versus ~500 msec for my original version of the query, cutting query time by at least a third. Combining relevant information from multiple tables into one view allows me simplify my map query into one API call: 'SELECT * FROM map_listings'.
 
-The view `map_listings` created in the schema contains all of the fields necessary to populate a JavaScript map of the AirBnB's in DC, and also displaying some basic information at the neighbourhood level. This view returns data in 110-150 msec, vs. ~500 msec for v1.0 queries, cutting query time by at least a third.
+To optimize joins, I built `idx_host_id` and `idx_neighbourhood_id` on the listings table. These are the only columns used in making joins that aren't already primary keys, so it should speed queries involving those joins. 
 
-To optimize joins, I built `idx_host_id` and `idx_neighbourhood_id` on the listings table, for the only columns used in making joins that aren't already primary keys. Using an index for purposes other than speeding joins, I built the `idx_lat_long` to optimize load time of the map, which has a marker for every listing.
+Using an index for purposes other than speeding joins, I built the `idx_lat_long` to optimize load time of the map, which has a marker for every listing.
 
-Make efficient queries for the webpage's api calls.
+For any data used in the web dashboard plots, I created efficient queries to speed the loading of data.
 
 ## Limitations
 
@@ -107,14 +134,18 @@ In this section you should answer the following questions:
 
 * What are the limitations of your design?
 
-It takes up slightly more storage space, due to indexes. 
+No optimizations to handle a high concurrency, a large volume of simultaneous users.
 
-One big flaw is that it has to be updated manually, although much of that is automated.
+It takes up slightly more storage space, due to indexes, and a lot more storage space due to the inclusion of specific reviews and calendar data (review comments and the calendar table trebled the size of hard disk storage, from 100MB to 300MB). 
 
-Not really designed for create, update, delete - only read. CRUD disappointed.
+One big flaw is that it has to be updated manually. Much of that process has been automated, but I still have to start it.
 
-Entirely static. Not dynamic. No realtime updates. Assumes listings and hosts do not change.
+It's not really designed for the user to create, update, and delete - only read, disappointing the CRUD acronym.
+
+It's entirely static. Not dynamic. No real-time updates. It assumes listings and hosts do not change. It will only ever provide a snapshot, based upon the day the website was scraped.
 
 * What might your database not be able to represent very well?
 
-Nothing realtime, like responding to changes in bookings.
+Nothing real-time, like responding to changes in bookings.
+
+No information on guests, those who rent AirBnB's.

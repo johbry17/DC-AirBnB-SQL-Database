@@ -1,6 +1,6 @@
 "hosts"
 --
-"host_id" BIGINT
+"host_id" BIGINT PK
 "host_url" TEXT
 "host_name" TEXT
 "host_since" DATE
@@ -21,7 +21,7 @@
 
 "host_listings_count"
 --
-"host_id" BIGINT FK >- "hosts"."host_id"
+"host_id" BIGINT PK FK - "hosts"."host_id"
 "host_listings_total_count" INT
 "host_listings_entire_homes_count" INT
 "host_listings_private_rooms_count" INT
@@ -29,12 +29,12 @@
 
 "neighbourhoods"
 --
-"neighbourhood_id" serial
+"neighbourhood_id" serial PK
 "neighbourhood" TEXT
 
 "listings"
 --
-"listing_id" BIGINT
+"listing_id" BIGINT PK
 "host_id" int FK >- "hosts"."host_id"
 "neighbourhood_id" int FK >- "neighbourhoods"."neighbourhood_id"
 "latitude" FLOAT
@@ -47,7 +47,7 @@
 
 "listings_categorical"
 --
-"listing_id" bigint FK >- "listings"."listing_id"
+"listing_id" bigint PK FK - "listings"."listing_id"
 "listing_name" TEXT
 "hover_description" TEXT NULL
 "description" TEXT NULL
@@ -62,7 +62,7 @@
 
 "availability"
 --
-"listing_id" BIGINT FK >- "listings"."listing_id"
+"listing_id" BIGINT PK FK - "listings"."listing_id"
 "has_availability" BOOLEAN
 "availability_30" INT
 "availability_60" INT
@@ -73,7 +73,7 @@
 
 "min_max_night"
 --
-"listing_id" BIGINT FK >- "listings"."listing_id"
+"listing_id" BIGINT PK FK - "listings"."listing_id"
 "minimum_nights" DECIMAL
 "maximum_nights" DECIMAL
 "minimum_minimum_nights" DECIMAL
@@ -85,7 +85,7 @@
 
 "listing_reviews"
 --
-"listing_id" BIGINT FK >- "listings"."listing_id"
+"listing_id" BIGINT PK FK - "listings"."listing_id"
 "number_of_reviews" INT
 "number_of_reviews_ltm" INT
 "number_of_reviews_l30d" INT
@@ -102,19 +102,20 @@
 
 "reviews"
 --
-"review_id" BIGINT
-"listing_id" BIGINT FK >- "listing_reviews"."listing_id"
+"review_id" BIGINT PK
+"listing_id" BIGINT FK >- "listings"."listing_id"
 "review_date" DATE
 "reviewer_id" BIGINT
 "reviewer_name" TEXT NULL
-#  "review_comments" TEXT   NOT NULL,
+ "review_comments" TEXT,
 
 "calendar"
 --
-"id" serial
+"id" serial PK
 "listing_id" BIGINT FK >- "listings"."listing_id"
 "date" DATE
 "available" BOOLEAN
 "price" decimal
 "minimum_nights" INT
 "maximum_nights" INT
+

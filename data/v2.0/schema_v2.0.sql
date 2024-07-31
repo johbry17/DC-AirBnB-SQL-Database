@@ -149,7 +149,7 @@ CREATE TABLE "reviews" (
     "review_date" DATE   NOT NULL,
     "reviewer_id" BIGINT   NOT NULL,
     "reviewer_name" TEXT,
-    -- "review_comments" TEXT   NOT NULL,
+    "review_comments" TEXT,
     CONSTRAINT "pk_reviews" PRIMARY KEY (
         "review_id"
      )
@@ -190,7 +190,7 @@ ALTER TABLE "listing_reviews" ADD CONSTRAINT "fk_listing_reviews_listing_id" FOR
 REFERENCES "listings" ("listing_id");
 
 ALTER TABLE "reviews" ADD CONSTRAINT "fk_reviews_listing_id" FOREIGN KEY("listing_id")
-REFERENCES "listing_reviews" ("listing_id");
+REFERENCES "listings" ("listing_id");
 
 ALTER TABLE "calendar" ADD CONSTRAINT "fk_calendar_listing_id" FOREIGN KEY("listing_id")
 REFERENCES "listings" ("listing_id");
