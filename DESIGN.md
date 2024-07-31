@@ -10,19 +10,30 @@ In this section you should answer the following questions:
 
 * What is the purpose of your database?
 
-Build a database of AirBnB listings in Washington, DC, for use in a Jupyter notebook exploratory data analysis, a Tableau explanatory data analysis, and a web dashboard. It must be in PostgreSQL. It must contain the data necessary for a JavaScript map already made. I'm reverse-engineering this thing.
+The database is for managing and analyzing data on AirBnB lisitngs in Washington, DC.
+It's for use in a Jupyter notebook exploratory data analysis, a Tableau explanatory data analysis, and a web dashboard. I built it in PostgreSQL. It contains the data necessary for a JavaScript map in the web dashboard. It supports functionalities like viewing the individual listings on a map, understanding host behavior, and analyzing reviews, availability, and pricing.
 
 * Which people, places, things, etc. are you including in the scope of your database?
 
-A plethora of information related to AirBnB listings, such as location, bed(/bath)rooms, amenities, pricing, host info, reviews, etc.
+**Listings** - Individual AirBnB listings and their details, like price, location, amenities. This data has been partitioned into mutiple tables, with common numerical and categorical data in two primary tables, and several side tables tracking the future availability of the listings, info on minimum and maximum number of nights and price, and average review scores for different aspects of each listing.
+
+**Hosts** - Hosts of AirBnB listings and their associated data, like response and acceptance rate, and methods of verifying host identity. Partitioned out is a separate host table covering the amount and type of listings the host offers, for analyzing hosts with multiple listings.
+
+**Neighbourhood** - A list of various DC neighbourhoods, which links to the listings.
+
+**Reviews** - Info about each review of all listings.
+
+**Calendar** - Records the price, availability and other details from the listing's calendar for each day of the next 365 days.
 
 * Which people, places, things, etc. are *outside* the scope of your database?
 
-This is a great question, but the reality is: anything not already in the data set. The maximum scope is pre-determined. But, I shall whittle away at the data collected and make note of it here, and set the minimum scope.
+AirBnB users who are not hosts, which I assume are guests - vacationers, business travelers, etc. I lack any detailed information about guests beyond reviews and reviewer names.
 
-Information about renters. I have none. I can estimate demand, but know no demographics.
+Listings outside of Washington, DC. This has a local focus on one city, and cannot contribute to a larger analysis of AirBnB on a country or global basis.
 
-I know nothing about neighborhood features (well, the database doesn't).
+No information about transactions or bookings. Methods of payment, cancellations or refunds, timing of bookings, etc.
+
+I know nothing about neighborhood features (well, the database doesn't - I live in DC), which could impact the price and popularity of listings.
 
 ## Functional Requirements
 
