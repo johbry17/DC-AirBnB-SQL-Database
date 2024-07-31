@@ -10,15 +10,15 @@ In this section you should answer the following questions:
 
 * What is the purpose of your database?
 
-Data analysis. The database is for managing and analyzing data on AirBnB listings in Washington, DC. It's for use in a Jupyter notebook exploratory data analysis, a Tableau explanatory data analysis, and a web dashboard. I built it in PostgreSQL. It contains the data necessary for a JavaScript map in the web dashboard. It supports functionalities like viewing the individual listings on a map, understanding host behavior, and analyzing reviews, availability, and pricing. As such, it will be read-only for the general user, with myself commiting any updates.
+Data analysis. The database is for managing and analyzing data on AirBnB listings in Washington, DC. It's for use in a Jupyter notebook exploratory data analysis, a Tableau explanatory data analysis, and a web dashboard. I built it in PostgreSQL. It contains the data necessary for a JavaScript map in the web dashboard. It supports functionalities like viewing the individual listings on a map, understanding host behavior, and analyzing reviews, availability, and pricing. As such, it will be read-only for the general user, with myself committing any updates.
 
 * Which people, places, things, etc. are you including in the scope of your database?
 
-**Listings** - Individual AirBnB listings and their details, like price, location, amenities. This data has been partitioned into mutiple tables, with common numerical and categorical data in two primary tables, and several side tables tracking the future availability of the listings, info on minimum and maximum number of nights and price, and average review scores for different aspects of each listing.
+**Listings** - Individual AirBnB listings and their details, like price, location, amenities. This data has been partitioned into multiple tables, with common numerical and categorical data in two primary tables, and several side tables tracking the future availability of the listings, info on minimum and maximum number of nights and price, and average review scores for different aspects of each listing.
 
 **Hosts** - Hosts of AirBnB listings and their associated data, like response and acceptance rate, and methods of verifying host identity. Partitioned out is a separate host table covering the amount and type of listings the host offers, for analyzing hosts with multiple listings.
 
-**Neighbourhood** - A list of various DC neighbourhoods, which links to the listings.
+**Neighbourhood** - A list of various DC neighbourhoods, which links to the listings. Apparently, I'm going with the British spelling of neighbourhood.
 
 **Reviews** - Info about each review of all listings.
 
@@ -40,7 +40,7 @@ In this section you should answer the following questions:
 
 * What should a user be able to do with your database?
 
-Viewings lisiting on a map with detailed information (e.g., price, property type, host info).
+Viewing listings on a map with detailed information (e.g., price, property type, host info).
 
 Use the web dashboard to see stats on AirBnB's in DC and at the neighbourhood level.
 
@@ -73,115 +73,125 @@ In this section you should answer the following questions:
 * What attributes will those entities have?
 
 `hosts`
-    "host_id",
-    "host_url",
-    "host_name",
-    "host_since",
-    "host_location",
-    "host_about",
-    "host_response_time",
-    "host_response_rate",
-    "host_acceptance_rate",
-    "host_is_superhost",
-    "host_thumbnail_url",
-    "host_picture_url",
-    "host_neighbourhood",
-    "host_listings_count",
-    "host_total_listings_count",
-    "host_verifications",
-    "host_has_profile_pic",
-    "host_identity_verified",
+
+    "host_id" - Primary Key. Airbnb's unique identifier for the host/user
+    "host_url" - The Airbnb page for the host
+    "host_name" - Name of the host. Usually just the first name(s)
+    "host_since" - The date the host/user was created. For hosts that are Airbnb guests this could be the date they registered as a guest
+    "host_location" - The host's self reported location
+    "host_about" - Description about the host
+    "host_response_time" - Host's response time to guest inquiries
+    "host_response_rate" - Host's response rate to guest inquiries
+    "host_acceptance_rate" - That rate at which a host accepts booking requests
+    "host_is_superhost" - Boolean
+    "host_thumbnail_url" - 
+    "host_picture_url" - 
+    "host_neighbourhood" - Presumably self-reported
+    "host_listings_count" - The number of listings the host has (per Airbnb unknown calculations)
+    "host_total_listings_count" - The number of listings the host has (per Airbnb unknown calculations)
+    "host_verifications" - Phone, email, work email
+    "host_has_profile_pic" - Boolean
+    "host_identity_verified" - Boolean
 
 `host_listings_count`
-    "host_id",
-    "host_listings_total_count",
-    "host_listings_entire_homes_count",
-    "host_listings_private_rooms_count",
-    "host_listings_shared_rooms_count",
+
+    "host_id" - Primary Key, Foreign Key to `hosts`
+    "host_listings_total_count" - The number of listings the host has in the current scrape, in DC
+    "host_listings_entire_homes_count" - The number of Entire home/apt listings the host has in the current scrape, in DC
+    "host_listings_private_rooms_count" - The number of Private room listings the host has in the current scrape, in DC
+    "host_listings_shared_rooms_count" - The number of Shared room listings the host has in the current scrape, in DC
 
 `neighbourhoods`
-    "neighbourhood_id",
-    "neighbourhood",
+
+    "neighbourhood_id" - Primary Key
+    "neighbourhood" - The neighbourhood group as geocoded using the latitude and longitude against neighborhoods as defined by open or public digital shapefiles
 
 `listings`
-    "listing_id",
-    "host_id",
-    "neighbourhood_id",
-    "latitude",
-    "longitude",
-    "accommodates",
-    "bathrooms",
-    "bedrooms",
-    "beds",
-    "price",
+
+    "listing_id" - Primary Key. Airbnb's unique identifier for the listing
+    "host_id" - Foreign Key to `hosts`
+    "neighbourhood_id" - Foreign Key to `neighbourhoods`
+    "latitude" - Uses the World Geodetic System (WGS84) projection for latitude and longitude
+    "longitude" - Uses the World Geodetic System (WGS84) projection for latitude and longitude
+    "accommodates" - The maximum capacity of the listing
+    "bathrooms" - The number of bathrooms in the listing, for older scrapes. On the Airbnb web-site, the bathrooms field has evolved from a number to a textual description
+    "bedrooms" - The number of bedrooms
+    "beds" - The number of bed(s)
+    "price" - Daily price in local currency
 
 `listings_categorical`
-    "listing_id",
-    "listing_name",
-    "hover_description",
-    "description",
-    "listing_url",
-    "neighborhood_overview",
-    "picture_url",
-    "property_type",
-    "room_type",
-    "amenities",
-    "bathrooms_text",
-    "license",
+
+    "listing_id" - Primary Key, Foreign Key to `listings`
+    "listing_name" - Name of the listing
+    "hover_description" - Alternate of name, for map display
+    "description" - Detailed description of the listing
+    "listing_url" - 
+    "neighborhood_overview" - Host's description of the neighbourhood
+    "picture_url" - URL to the Airbnb hosted regular sized image for the listing
+    "property_type" - Self selected property type. Hotels and Bed and Breakfasts are described as such by their hosts in this field
+    "room_type" - All homes are grouped into the following room types: Entire home/apt, Private room, Shared room, Hotel room
+    "amenities" - List of amenities
+    "bathrooms_text" - The number of bathrooms in the listing. On the Airbnb web-site, the bathrooms field has evolved from a number to a textual description. For older scrapes, listings.bathrooms is used.
+    "license" - The licence/permit/registration number
 
 `availability`
-    "listing_id",
-    "has_availability",
-    "availability_30",
-    "availability_60",
-    "availability_90",
-    "availability_365",
-    "calendar_last_scraped",
-    "instant_bookable",
+
+    "listing_id" - Primary Key, Foreign Key to `listings`
+    "has_availability" - Boolean
+    "availability_30" - The availability of the listing 30 days in the future as determined by the calendar. Note a listing may not be available because it has been booked by a guest or blocked by the host
+    "availability_60" - The availability of the listing 60 days in the future as determined by the calendar. Note a listing may not be available because it has been booked by a guest or blocked by the host
+    "availability_90" - The availability of the listing 90 days in the future as determined by the calendar. Note a listing may not be available because it has been booked by a guest or blocked by the host
+    "availability_365" - The availability of the listing 365 days in the future as determined by the calendar. Note a listing may not be available because it has been booked by a guest or blocked by the host
+    "calendar_last_scraped" - Scrape date
+    "instant_bookable" - Boolean. Whether the guest can automatically book the listing without the host requiring to accept their booking request. An indicator of a commercial listing
 
 `min_max_night`
-    "listing_id",
-    "minimum_nights",
-    "maximum_nights",
-    "minimum_minimum_nights",
-    "maximum_minimum_nights",
-    "minimum_maximum_nights",
-    "maximum_maximum_nights",
-    "minimum_nights_avg_ntm",
-    "maximum_nights_avg_ntm",
+
+    "listing_id" - Primary Key, Foreign Key to `listings`
+    "minimum_nights" - Minimum number of night stay for the listing (calendar rules may be different)
+    "maximum_nights" - Maximum number of night stay for the listing (calendar rules may be different)
+    "minimum_minimum_nights" - The smallest minimum_night value from the calender (looking 365 nights in the future)
+    "maximum_minimum_nights" - The largest minimum_night value from the calender (looking 365 nights in the future)
+    "minimum_maximum_nights" - The smallest maximum_night value from the calender (looking 365 nights in the future)
+    "maximum_maximum_nights" - The largest maximum_night value from the calender (looking 365 nights in the future)
+    "minimum_nights_avg_ntm" - The average minimum_night value from the calender (looking 365 nights in the future)
+    "maximum_nights_avg_ntm" - The average maximum_night value from the calender (looking 365 nights in the future)
 
 `listing_reviews`
-    "listing_id",
-    "number_of_reviews",
-    "number_of_reviews_ltm",
-    "number_of_reviews_l30d",
-    "first_review",
-    "last_review",
-    "review_scores_rating",
-    "review_scores_accuracy",
-    "review_scores_cleanliness",
-    "review_scores_checkin",
-    "review_scores_communication",
-    "review_scores_location",
-    "reviews_per_month",
-    "review_scores_value",
+
+    "listing_id" - Primary Key, Foreign Key to `listings`
+    "number_of_reviews" - The number of reviews the listing has
+    "number_of_reviews_ltm" - The number of reviews the listing has (in the last 12 months)
+    "number_of_reviews_l30d" - The number of reviews the listing has (in the last 30 days)
+    "first_review" - The date of the first/oldest review
+    "last_review" - The date of the last/newest review
+    "review_scores_rating" - Rating score
+    "review_scores_accuracy" - Listing accuracy score
+    "review_scores_cleanliness" - cleanliness score
+    "review_scores_checkin" - Score of check-in process
+    "review_scores_communication" - Score of host's communication
+    "review_scores_location" - Location score
+    "reviews_per_month" - The average number of reviews per month the listing has over the lifetime of the listing
+    "review_scores_value" - Value for price score
 
 `reviews`
-	"review_id",    
-    "listing_id",
-    "review_date",
-    "reviewer_id",
-    "reviewer_name",
-    "review_comments",
+
+	"review_id" - Primary Key
+    "listing_id" - Foreign Key to `listings`
+    "review_date" - Date of review
+    "reviewer_id" - Reviewer's AirBnB id
+    "reviewer_name" - Reviewer's name
+    "review_comments" - Actual review
 
 `calendar`
-    "id" serial,
-    "listing_id",
-    "date",
-    "available",
-    "price",
-    "minimum_nights",
-    "maximum_nights",
+
+    "id" - Primary Key
+    "listing_id" - Foreign Key to `listings`
+    "date" - The date in the listing's calendar
+    "available" - Boolean. Whether the date is available for a booking
+    "price" - The price listed for the day
+    "minimum_nights" - Minimum nights for a booking made on this day
+    "maximum_nights" - Maximum nights for a booking made on this day
 
 * Why did you choose the types you did?
 
@@ -193,7 +203,7 @@ Primary Keys to ensure uniqueness of each entity. Also because they are essentia
 
 Foreign keys to establish relationships between the entities.
 
-The only other constraint I used was `NOT NULL`, to ensure some required fields were filled, like `price`. The Primary Keys ensured uniqueness enough for each entity. The only default value I had to set was created in Python (for price, based on the neighbourhood median). Check constraints were unnecessary.
+The only other constraint I used was `NOT NULL`, to ensure some required fields were filled, like `price`. The Primary Keys ensure uniqueness enough for each entity. The only default value I had to set was created in Python (for price, based on the neighbourhood median). Check constraints were unnecessary.
 
 ### Relationships
 
@@ -227,7 +237,7 @@ In this section you should answer the following questions:
 
 In the acronym of CRUD, I am functionally only interested in the 'R'. I'm biased towards speed of query results, as the data is being used to load a webpage. I will be the only one updating the database, and that infrequently, so the amount of time and complexity involved in updating doesn't bother me. I will keep a modest eye on the amount of hard disk memory storage taken up, but even that is mostly inconsequential to me.
 
-I partitioned off a lot of the listings data into separate categories to speed runtime. I created two tables for common numerical and categorical data, and then several other tables for less frequently accessed data (availaiblity, minimum and maximum night, aggregate review statistics).
+I partitioned off a lot of the listings data into separate categories to speed runtime. I created two tables for common numerical and categorical data, and then several other tables for less frequently accessed data (availability, minimum and maximum night, aggregate review statistics).
 
 The view `map_listings` created in the schema contains all of the fields necessary to populate a JavaScript map of the AirBnB's in DC, and also displaying some basic information at the neighbourhood level. This view returns data in 110-150 msec, versus ~500 msec for my original version of the query, cutting query time by at least a third. Combining relevant information from multiple tables into one view allows me simplify my map query into one API call: 'SELECT * FROM map_listings'.
 
