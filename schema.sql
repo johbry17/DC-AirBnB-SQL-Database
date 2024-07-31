@@ -1,26 +1,6 @@
 -- In this SQL file, write (and comment!) the schema of your database, including the CREATE TABLE, CREATE INDEX, CREATE VIEW, etc. statements that compose it
 
--- NEED TO CREATE TABLES FOR:
-
--- listing.latitude
--- listing.longitude
--- listing.hover_description
--- listing.listing_url
--- listing.price
--- listing.property_type
--- listing.accommodates
--- listing.review_scores_rating
--- listing.host_name
--- listing.host_identity_verified
--- listing.host_total_listings_count
--- listing.license
--- listing.neighbourhood
-
--- Two api routes:
--- /api/listings (This is just a SQL query that combines all the data INTO the listing table)
--- /static/resources/neighbourhoods.geojson
-
--- So, I pretty much have free latitude to do what I want!
+-- basic information about airBnB hosts
 CREATE TABLE "hosts" (
     "host_id" BIGINT   NOT NULL,
     "host_url" TEXT   NOT NULL,
@@ -45,6 +25,7 @@ CREATE TABLE "hosts" (
      )
 );
 
+-- secondary host data
 CREATE TABLE "host_listings_count" (
     "host_id" BIGINT   NOT NULL,
     "host_listings_total_count" INT   NOT NULL,
@@ -56,6 +37,7 @@ CREATE TABLE "host_listings_count" (
      )
 );
 
+-- neighbourhoods in which listings are located, for data analysis on neighbourhood level
 CREATE TABLE "neighbourhoods" (
     "neighbourhood_id" serial   NOT NULL,
     "neighbourhood" TEXT   NOT NULL,
@@ -64,6 +46,7 @@ CREATE TABLE "neighbourhoods" (
      )
 );
 
+-- common information about individual listings, numerical data
 CREATE TABLE "listings" (
     "listing_id" BIGINT   NOT NULL,
     "host_id" int   NOT NULL,
@@ -80,6 +63,7 @@ CREATE TABLE "listings" (
      )
 );
 
+-- common categorical information about listings
 CREATE TABLE "listings_categorical" (
     "listing_id" bigint   NOT NULL,
     "listing_name" TEXT   NOT NULL,
@@ -98,6 +82,7 @@ CREATE TABLE "listings_categorical" (
      )
 );
 
+-- information about current and future availability of listings
 CREATE TABLE "availability" (
     "listing_id" BIGINT   NOT NULL,
     "has_availability" BOOLEAN   NOT NULL,
@@ -112,6 +97,7 @@ CREATE TABLE "availability" (
      )
 );
 
+-- information about minimum and maximum nights that can be booked
 CREATE TABLE "min_max_night" (
     "listing_id" BIGINT   NOT NULL,
     "minimum_nights" DECIMAL   NOT NULL,
@@ -127,6 +113,7 @@ CREATE TABLE "min_max_night" (
      )
 );
 
+-- numerical ratings and number of reviews for listings
 CREATE TABLE "listing_reviews" (
     "listing_id" BIGINT   NOT NULL,
     "number_of_reviews" INT   NOT NULL,
@@ -147,18 +134,20 @@ CREATE TABLE "listing_reviews" (
      )
 );
 
+-- individual reviews for listings
 CREATE TABLE "reviews" (
 	"review_id" BIGINT   NOT NULL,    
     "listing_id" BIGINT   NOT NULL,
     "review_date" DATE   NOT NULL,
     "reviewer_id" BIGINT   NOT NULL,
     "reviewer_name" TEXT,
-    -- "review_comments" TEXT   NOT NULL,
+    "review_comments" TEXT   NOT NULL,
     CONSTRAINT "pk_reviews" PRIMARY KEY (
         "review_id"
      )
 );
 
+-- calendar data for listings over next year
 CREATE TABLE "calendar" (
     "id" serial   NOT NULL,
     "listing_id" BIGINT   NOT NULL,
@@ -172,6 +161,7 @@ CREATE TABLE "calendar" (
      )
 );
 
+-- foreign keys
 ALTER TABLE "host_listings_count" ADD CONSTRAINT "fk_host_listings_count_host_id" FOREIGN KEY("host_id")
 REFERENCES "hosts" ("host_id");
 
@@ -199,6 +189,7 @@ REFERENCES "listings" ("listing_id");
 ALTER TABLE "calendar" ADD CONSTRAINT "fk_calendar_listing_id" FOREIGN KEY("listing_id")
 REFERENCES "listings" ("listing_id");
 
+-- view for an api call to display the listings on a map in a web dashboard
 CREATE VIEW map_listings AS
 SELECT 
     l.latitude,
@@ -225,8 +216,11 @@ JOIN
 JOIN
     neighbourhoods n ON l.neighbourhood_id = n.neighbourhood_id;
 
+-- index to speed joins
 CREATE INDEX idx_host_id ON listings(host_id);
 
+-- index to speed joins
 CREATE INDEX idx_neighbourhood_id ON listings(neighbourhood_id);
 
+-- index to speed loading of aforementioned map
 CREATE INDEX idx_lat_long ON listings(latitude, longitude);

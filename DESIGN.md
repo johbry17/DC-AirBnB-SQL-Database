@@ -68,11 +68,120 @@ In this section you should answer the following questions:
 
 * Which entities will you choose to represent in your database?
 
-
+`hosts`, `host_listings_count`, `neighbourhoods`, `listings`, `listings_categorical`, `availability`, `min_max_night`, `listing_reviews`, `reviews`, `calendar`
 
 * What attributes will those entities have?
 
+`hosts`
+    "host_id",
+    "host_url",
+    "host_name",
+    "host_since",
+    "host_location",
+    "host_about",
+    "host_response_time",
+    "host_response_rate",
+    "host_acceptance_rate",
+    "host_is_superhost",
+    "host_thumbnail_url",
+    "host_picture_url",
+    "host_neighbourhood",
+    "host_listings_count",
+    "host_total_listings_count",
+    "host_verifications",
+    "host_has_profile_pic",
+    "host_identity_verified",
 
+`host_listings_count`
+    "host_id",
+    "host_listings_total_count",
+    "host_listings_entire_homes_count",
+    "host_listings_private_rooms_count",
+    "host_listings_shared_rooms_count",
+
+`neighbourhoods`
+    "neighbourhood_id",
+    "neighbourhood",
+
+`listings`
+    "listing_id",
+    "host_id",
+    "neighbourhood_id",
+    "latitude",
+    "longitude",
+    "accommodates",
+    "bathrooms",
+    "bedrooms",
+    "beds",
+    "price",
+
+`listings_categorical`
+    "listing_id",
+    "listing_name",
+    "hover_description",
+    "description",
+    "listing_url",
+    "neighborhood_overview",
+    "picture_url",
+    "property_type",
+    "room_type",
+    "amenities",
+    "bathrooms_text",
+    "license",
+
+`availability`
+    "listing_id",
+    "has_availability",
+    "availability_30",
+    "availability_60",
+    "availability_90",
+    "availability_365",
+    "calendar_last_scraped",
+    "instant_bookable",
+
+`min_max_night`
+    "listing_id",
+    "minimum_nights",
+    "maximum_nights",
+    "minimum_minimum_nights",
+    "maximum_minimum_nights",
+    "minimum_maximum_nights",
+    "maximum_maximum_nights",
+    "minimum_nights_avg_ntm",
+    "maximum_nights_avg_ntm",
+
+`listing_reviews`
+    "listing_id",
+    "number_of_reviews",
+    "number_of_reviews_ltm",
+    "number_of_reviews_l30d",
+    "first_review",
+    "last_review",
+    "review_scores_rating",
+    "review_scores_accuracy",
+    "review_scores_cleanliness",
+    "review_scores_checkin",
+    "review_scores_communication",
+    "review_scores_location",
+    "reviews_per_month",
+    "review_scores_value",
+
+`reviews`
+	"review_id",    
+    "listing_id",
+    "review_date",
+    "reviewer_id",
+    "reviewer_name",
+    "review_comments",
+
+`calendar`
+    "id" serial,
+    "listing_id",
+    "date",
+    "available",
+    "price",
+    "minimum_nights",
+    "maximum_nights",
 
 * Why did you choose the types you did?
 
