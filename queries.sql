@@ -97,6 +97,24 @@ SELECT room_type, COUNT(*) FROM listings_categorical GROUP BY room_type;
 SELECT property_type, COUNT(*) FROM listings_categorical GROUP BY property_type;
 -- finer grained categories of property types
 
+SELECT l.latitude, l.longitude, lc.room_type FROM listings l
+JOIN listings_categorical lc ON l.listing_id = lc.listing_id;
+-- for mapping by room type
+
+SELECT l.latitude, l.longitude, l.price FROM listings l
+WHERE price < 500;
+-- for mapping by price on a spectrum, dropping outliers
+
+SELECT l.latitude, l.longitude, n.neighbourhood, AVG(l.price) AS avg_price 
+FROM listings l
+JOIN neighbourhoods n ON l.neighbourhood_id = n.neighbourhood_id
+WHERE l.price < 500
+GROUP BY n.neighbourhood, l.latitude, l.longitude;
+-- for mapping by neighbourhood, color coded by average price
+
+SELECT l.latitude, l.longitude, lc.license FROM listings l
+LEFT JOIN listings_categorical lc ON l.listing_id = lc.listing_id;
+-- for mapping by license status
 
 
 
