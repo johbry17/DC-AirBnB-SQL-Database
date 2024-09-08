@@ -13,6 +13,10 @@ It's designed to support the project located in this repo here: [https://github.
 Unzip `calendar.csv.gz` using instructions in `extract_calendar_instructions.txt`.
 Unzip `reviews.csv.gz` and `listings.csv.gz`, using `lg_csv_splitter.ipynb` if necessary (GitHub won't accept files above 100MB).
 
+# Certificate
+
+![cs50 SQL certificate](./CS50%20SQL.png)
+
 # Acknowledgements
 
 Thanks to the cs50 team, for providing the (free!) high-quality instruction and resources to learn the fundamentals of programming.
