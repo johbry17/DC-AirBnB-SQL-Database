@@ -4,6 +4,10 @@ By Bryan Johns
 
 Video overview: <URL HERE>
 
+GitHub repo here: [https://github.com/johbry17/DC-AirBnB-SQL-Database](https://github.com/johbry17/DC-AirBnB-SQL-Database).
+
+It's designed to support the project located in this repo here: [https://github.com/johbry17/DC-AirBnB-Data](https://github.com/johbry17/DC-AirBnB-Data).
+
 ## Scope
 
 In this section you should answer the following questions:
