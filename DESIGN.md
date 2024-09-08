@@ -10,7 +10,7 @@ In this section you should answer the following questions:
 
 * What is the purpose of your database?
 
-Data analysis. The database is for managing and analyzing data on AirBnB listings in Washington, DC. It's for use in a Jupyter notebook exploratory data analysis, a Tableau explanatory data analysis, and a web dashboard. I built it in PostgreSQL. It contains the data necessary for a JavaScript map in the web dashboard. It supports functionalities like viewing the individual listings on a map, understanding host behavior, and analyzing reviews, availability, and pricing. As such, it will be read-only for the general user, with myself committing any updates.
+Data analysis. The database is for managing and analyzing data on AirBnB listings in Washington, DC. It supports both exploratory and explanatory data analysis and is designed for use in a Jupyter Notebook, Tableau, and a web dashboard. I built it in PostgreSQL. It contains the data necessary for a JavaScript map in the web dashboard. It supports functionalities like viewing the individual listings on a map, understanding host behavior, and analyzing reviews, availability, and pricing. As such, it will be read-only for the general user, with myself committing any updates.
 
 * Which people, places, things, etc. are you including in the scope of your database?
 
@@ -32,7 +32,7 @@ Listings outside of Washington, DC. This has a local focus on one city, and cann
 
 No information about transactions or bookings. Methods of payment, cancellations or refunds, timing of bookings, etc.
 
-I know nothing about neighborhood features (well, the database doesn't - I live in DC), which could impact the price and popularity of listings.
+I know nothing about neighbourhood features (well, the database doesn't - I live in DC), which could impact the price and popularity of listings.
 
 ## Functional Requirements
 
@@ -60,6 +60,8 @@ No information of transaction history. I don't know who rented what, when.
 
 No user-specific features. It can't be customized depending upon a user's preferences.
 
+It only contains data for Washington, DC. It could easily be retooled for expansion to other cities in the future.
+
 ## Representation
 
 ### Entities
@@ -70,15 +72,17 @@ In this section you should answer the following questions:
 
 `hosts`, `host_listings_count`, `neighbourhoods`, `listings`, `listings_categorical`, `availability`, `min_max_night`, `listing_reviews`, `reviews`, `calendar`
 
+This will contain all of the available data that I could get, although not all of it have I used yet in data analysis. It's there if I need it.
+
 * What attributes will those entities have?
 
 `hosts`
 
-    "host_id" - Primary Key. Airbnb's unique identifier for the host/user
-    "host_url" - The Airbnb page for the host
+    "host_id" - Primary Key. AirBnB's unique identifier for the host/user
+    "host_url" - The AirBnB page for the host
     "host_name" - Name of the host. Usually just the first name(s)
-    "host_since" - The date the host/user was created. For hosts that are Airbnb guests this could be the date they registered as a guest
-    "host_location" - The host's self reported location
+    "host_since" - The date the host/user was created. For hosts that are AirBnB guests this could be the date they registered as a guest
+    "host_location" - The host's self-reported location
     "host_about" - Description about the host
     "host_response_time" - Host's response time to guest inquiries
     "host_response_rate" - Host's response rate to guest inquiries
@@ -87,8 +91,8 @@ In this section you should answer the following questions:
     "host_thumbnail_url" - 
     "host_picture_url" - 
     "host_neighbourhood" - Presumably self-reported
-    "host_listings_count" - The number of listings the host has (per Airbnb unknown calculations)
-    "host_total_listings_count" - The number of listings the host has (per Airbnb unknown calculations)
+    "host_listings_count" - The number of listings the host has (per AirBnB unknown calculations)
+    "host_total_listings_count" - The number of listings the host has (per AirBnB unknown calculations)
     "host_verifications" - Phone, email, work email
     "host_has_profile_pic" - Boolean
     "host_identity_verified" - Boolean
@@ -104,17 +108,17 @@ In this section you should answer the following questions:
 `neighbourhoods`
 
     "neighbourhood_id" - Primary Key
-    "neighbourhood" - The neighbourhood group as geocoded using the latitude and longitude against neighborhoods as defined by open or public digital shapefiles
+    "neighbourhood" - The neighbourhood group as geocoded using the latitude and longitude against neighbourhoods as defined by open or public digital shapefiles
 
 `listings`
 
-    "listing_id" - Primary Key. Airbnb's unique identifier for the listing
+    "listing_id" - Primary Key. AirBnB's unique identifier for the listing
     "host_id" - Foreign Key to `hosts`
     "neighbourhood_id" - Foreign Key to `neighbourhoods`
     "latitude" - Uses the World Geodetic System (WGS84) projection for latitude and longitude
     "longitude" - Uses the World Geodetic System (WGS84) projection for latitude and longitude
     "accommodates" - The maximum capacity of the listing
-    "bathrooms" - The number of bathrooms in the listing, for older scrapes. On the Airbnb web-site, the bathrooms field has evolved from a number to a textual description
+    "bathrooms" - The number of bathrooms in the listing, for older scrapes. On the AirBnB web-site, the bathrooms field has evolved from a number to a textual description
     "bedrooms" - The number of bedrooms
     "beds" - The number of bed(s)
     "price" - Daily price in local currency
@@ -127,12 +131,12 @@ In this section you should answer the following questions:
     "description" - Detailed description of the listing
     "listing_url" - 
     "neighborhood_overview" - Host's description of the neighbourhood
-    "picture_url" - URL to the Airbnb hosted regular sized image for the listing
+    "picture_url" - URL to the AirBnB hosted regular sized image for the listing
     "property_type" - Self selected property type. Hotels and Bed and Breakfasts are described as such by their hosts in this field
     "room_type" - All homes are grouped into the following room types: Entire home/apt, Private room, Shared room, Hotel room
     "amenities" - List of amenities
-    "bathrooms_text" - The number of bathrooms in the listing. On the Airbnb web-site, the bathrooms field has evolved from a number to a textual description. For older scrapes, listings.bathrooms is used.
-    "license" - The licence/permit/registration number
+    "bathrooms_text" - The number of bathrooms in the listing. On the AirBnB web-site, the bathrooms field has evolved from a number to a textual description. For older scrapes, listings.bathrooms is used.
+    "license" - The license/permit/registration number
 
 `availability`
 
@@ -150,12 +154,12 @@ In this section you should answer the following questions:
     "listing_id" - Primary Key, Foreign Key to `listings`
     "minimum_nights" - Minimum number of night stay for the listing (calendar rules may be different)
     "maximum_nights" - Maximum number of night stay for the listing (calendar rules may be different)
-    "minimum_minimum_nights" - The smallest minimum_night value from the calender (looking 365 nights in the future)
-    "maximum_minimum_nights" - The largest minimum_night value from the calender (looking 365 nights in the future)
-    "minimum_maximum_nights" - The smallest maximum_night value from the calender (looking 365 nights in the future)
-    "maximum_maximum_nights" - The largest maximum_night value from the calender (looking 365 nights in the future)
-    "minimum_nights_avg_ntm" - The average minimum_night value from the calender (looking 365 nights in the future)
-    "maximum_nights_avg_ntm" - The average maximum_night value from the calender (looking 365 nights in the future)
+    "minimum_minimum_nights" - The smallest minimum_night value from the calendar (looking 365 nights in the future)
+    "maximum_minimum_nights" - The largest minimum_night value from the calendar (looking 365 nights in the future)
+    "minimum_maximum_nights" - The smallest maximum_night value from the calendar (looking 365 nights in the future)
+    "maximum_maximum_nights" - The largest maximum_night value from the calendar (looking 365 nights in the future)
+    "minimum_nights_avg_ntm" - The average minimum_night value from the calendar (looking 365 nights in the future)
+    "maximum_nights_avg_ntm" - The average maximum_night value from the calendar (looking 365 nights in the future)
 
 `listing_reviews`
 
@@ -235,13 +239,13 @@ In this section you should answer the following questions:
 
 * Which optimizations (e.g., indexes, views) did you create? Why?
 
-In the acronym of CRUD, I am functionally only interested in the 'R'. I'm biased towards speed of query results, as the data is being used to load a webpage. I will be the only one updating the database, and that infrequently, so the amount of time and complexity involved in updating doesn't bother me. I will keep a modest eye on the amount of hard disk memory storage taken up, but even that is mostly inconsequential to me.
+In the acronym of CRUD, I am functionally only interested in the 'R'. I'm biased towards speed of query results, as the data is being used to load a webpage. I will infrequently update the database myself (quarterly), so the amount of time and complexity involved in updating doesn't bother me. I will keep a modest eye on the amount of hard disk memory storage taken up, but even that is mostly inconsequential to me.
 
 I partitioned off a lot of the listings data into separate categories to speed runtime. I created two tables for common numerical and categorical data, and then several other tables for less frequently accessed data (availability, minimum and maximum night, aggregate review statistics).
 
 The view `map_listings` created in the schema contains all of the fields necessary to populate a JavaScript map of the AirBnB's in DC, and also displaying some basic information at the neighbourhood level. This view returns data in 110-150 msec, versus ~500 msec for my original version of the query, cutting query time by at least a third. Combining relevant information from multiple tables into one view allows me simplify my map query into one API call: 'SELECT * FROM map_listings'.
 
-To optimize joins, I built `idx_host_id` and `idx_neighbourhood_id` on the listings table. These are the only columns used in making joins that aren't already primary keys, so it should speed queries involving those joins. 
+To optimize joins, I built `idx_host_id` and `idx_neighbourhood_id` on the listings table. These are the only columns used in making joins that aren't already primary keys, so it should speed queries involving those joins. This does lead to increased storage space and longer insert / update times, but the trade-off is acceptable. I'm only going to update the data four times a year, and an extra 50MB is no big deal these days, compared to the scale of Big Data available.
 
 Using an index for purposes other than speeding joins, I built the `idx_lat_long` to optimize load time of the map, which has a marker for every listing.
 
@@ -255,9 +259,9 @@ In this section you should answer the following questions:
 
 No optimizations to handle a high concurrency, a large volume of simultaneous users.
 
-It takes up slightly more storage space, due to indexes, and a lot more storage space due to the inclusion of specific reviews and calendar data (review comments and the calendar table trebled the size of hard disk storage, from 100MB to 300MB). 
+It takes up slightly more storage space, due to indexes, and a lot more storage space due to the inclusion of specific reviews and calendar data (review comments and the calendar table tripled the size of hard disk storage, from 100MB to 300MB). 
 
-One big flaw is that it has to be updated manually. Much of that process has been automated, but I still have to start it.
+One big flaw is that it has to be updated manually. Much of that process has been automated, but I still have to start it. I intend to explore the feasibility of automating even that step, although I am a little nervous about scraping data without supervising it.
 
 It's not really designed for the user to create, update, and delete - only read, disappointing the CRUD acronym.
 
