@@ -5,6 +5,38 @@ FROM listings;
 -- I'll be doing a lot of queries on price
 
 SELECT 
+    l.listing_id,
+    l.accommodates,
+    l.bathrooms,
+    l.bedrooms,
+    l.beds,
+    l.price,
+    mmn.minimum_nights,
+    mmn.maximum_nights,
+    hlc.host_listings_total_count,
+    a.availability_30,
+    a.availability_60,
+    a.availability_90,
+    a.availability_365,
+    lr.number_of_reviews,
+    lr.number_of_reviews_ltm,
+    lr.number_of_reviews_l30d
+FROM 
+    listings l
+LEFT JOIN 
+    min_max_night mmn ON l.listing_id = mmn.listing_id
+LEFT JOIN 
+    host_listings_count hlc ON l.host_id = hlc.host_id
+LEFT JOIN 
+    availability a ON l.listing_id = a.listing_id
+LEFT JOIN 
+    listing_reviews lr ON l.listing_id = lr.listing_id
+WHERE 
+    l.price IS NOT NULL;
+-- a lot of nuerical data for a correlation matrix
+
+
+SELECT 
     neighbourhood, 
     ROUND(AVG(price), 2) AS avg_price, 
     percentile_cont(0.5) WITHIN GROUP (ORDER BY price) AS median_price, 
@@ -97,6 +129,68 @@ SELECT room_type, COUNT(*) FROM listings_categorical GROUP BY room_type;
 SELECT property_type, COUNT(*) FROM listings_categorical GROUP BY property_type;
 -- finer grained categories of property types
 
+SELECT 
+    host_identity_verified, 
+    host_is_superhost, 
+    COUNT(*) AS count 
+FROM hosts 
+GROUP BY host_identity_verified, host_is_superhost;
+--    host_identity_verified  host_is_superhost  count
+-- 0                   False              False    170
+-- 1                    True               True   1214
+-- 2                   False               True    163
+-- 3                    True              False   1012
+
+SELECT 
+    host_identity_verified, 
+    COUNT(*) AS count 
+FROM hosts 
+GROUP BY host_identity_verified;
+--    host_identity_verified  count
+-- 0                   False    333
+-- 1                    True   2226
+
+SELECT 
+    host_is_superhost, 
+    COUNT(*) AS count 
+FROM hosts 
+GROUP BY host_is_superhost;
+--    host_is_superhost  count
+-- 0              False   1182
+-- 1               True   1377
+
+SELECT l.host_id, h.host_name, COUNT(*) AS count
+FROM listings l
+JOIN hosts h on l.host_id = h.host_id
+GROUP BY l.host_id, h.host_name
+ORDER BY count DESC
+LIMIT 10;
+-- top 10 hosts by number of listings
+-- 39930655	"Sojourn"	199
+-- 107434423	"Blueground"	156
+-- 294545484	"Andreas"	104
+-- 46630199	"Home Sweet City"	81
+-- 446820235	"LuxurybookingsFZE"	55
+-- 30283594	"Global Luxury Suites"	54
+-- 53500538	"Mary'S Stay"	40
+-- 487806	"Stay Bubo"	37
+-- 561894308	"Global Luxury Suites"	36
+-- 315148	"John"	34
+
+SELECT l.host_id, h.host_name, COUNT(*) AS count
+FROM listings l
+JOIN hosts h on l.host_id = h.host_id
+WHERE h.host_name LIKE '%Luxury%'
+GROUP BY l.host_id, h.host_name
+ORDER BY count DESC;
+--      host_id             host_name  count
+-- 0  446820235     LuxurybookingsFZE     55
+-- 1   30283594  Global Luxury Suites     54
+-- 2  561894308  Global Luxury Suites     36
+-- 3  163251048         Global Luxury     26
+-- 4   72755484         Luxury Suites      2
+-- 5  418039710            K W Luxury      1
+
 SELECT l.latitude, l.longitude, lc.room_type FROM listings l
 JOIN listings_categorical lc ON l.listing_id = lc.listing_id;
 -- for mapping by room type
@@ -115,6 +209,60 @@ GROUP BY n.neighbourhood, l.latitude, l.longitude;
 SELECT l.latitude, l.longitude, lc.license FROM listings l
 LEFT JOIN listings_categorical lc ON l.listing_id = lc.listing_id;
 -- for mapping by license status
+
+SELECT
+    c.date,
+    AVG(c.price) AS avg_price
+FROM
+    calendar c
+WHERE
+    c.available = TRUE
+GROUP BY
+    c.date
+ORDER BY
+    c.date;
+-- for time series analysis of average price
+
+SELECT
+    c.date,
+    COUNT(*) AS count
+FROM
+    calendar c
+WHERE
+    c.available = TRUE
+GROUP BY
+    c.date
+ORDER BY
+    c.date;
+-- for time series analysis of number of listings available
+
+SELECT
+    c.date,
+    AVG(c.price) FILTER (WHERE c.available = TRUE) AS avg_price,
+    COUNT(*) FILTER (WHERE c.available = TRUE) AS available_listings
+FROM
+    calendar c
+GROUP BY
+    c.date
+ORDER BY
+    c.date;
+-- combines average price and number of listings available
+
+SELECT
+AVG(availability_30) AS avg_availability_30,
+AVG(availability_60) AS avg_availability_60,
+AVG(availability_90) AS avg_availability_90,
+AVG(availability_365) AS avg_availability_365
+FROM
+    availability;
+-- average availability over 30, 60, 90, and 365 days
+--  avg_availability_30  avg_availability_60  avg_availability_90  \
+-- 0            10.010552            25.775974            46.439732   
+
+--    avg_availability_365  
+-- 0            198.844562 
+
+
 
 
 
