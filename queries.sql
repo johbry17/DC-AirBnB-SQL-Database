@@ -35,6 +35,44 @@ WHERE
     l.price IS NOT NULL;
 -- a lot of nuerical data for a correlation matrix
 
+    SELECT 
+        l.listing_id,
+        lc.listing_name,
+        lc.hover_description,
+        l.price,
+        l.accommodates,
+        l.bathrooms,
+        l.bedrooms,
+        l.beds,
+        n.neighbourhood,
+        lc.room_type,
+        lmmn.minimum_nights,
+        lmmn.maximum_nights,
+        h.host_name,
+        h.host_response_time,
+        h.host_response_rate,
+        h.host_acceptance_rate,
+        h.host_is_superhost,
+        h.host_verifications,
+        h.host_has_profile_pic,
+        h.host_identity_verified,
+        lc.listing_url
+    FROM 
+        listings l
+    LEFT JOIN 
+        hosts h ON l.host_id = h.host_id
+    LEFT JOIN
+        neighbourhoods n ON l.neighbourhood_id = n.neighbourhood_id
+    LEFT JOIN
+        listings_categorical lc ON l.listing_id = lc.listing_id
+    LEFT JOIN
+        min_max_night lmmn ON l.listing_id = lmmn.listing_id
+    WHERE 
+        l.price IS NOT NULL
+    ORDER BY 
+        l.price DESC
+    LIMIT 20;
+-- top 20 most expensive listings
 
 SELECT 
     neighbourhood, 
@@ -199,12 +237,19 @@ SELECT l.latitude, l.longitude, l.price FROM listings l
 WHERE price < 500;
 -- for mapping by price on a spectrum, dropping outliers
 
+SELECT n.neighbourhood, AVG(l.price) as avg_price
+FROM listings l
+JOIN neighbourhoods n ON l.neighbourhood_id = n.neighbourhood_id
+WHERE l.price < 500
+GROUP BY n.neighbourhood;
+-- for chloropleth map by neighbourhood, color coded by average price
+
 SELECT l.latitude, l.longitude, n.neighbourhood, AVG(l.price) AS avg_price 
 FROM listings l
 JOIN neighbourhoods n ON l.neighbourhood_id = n.neighbourhood_id
 WHERE l.price < 500
 GROUP BY n.neighbourhood, l.latitude, l.longitude;
--- for mapping by neighbourhood, color coded by average price
+-- for scatter plot mapping by neighbourhood, color coded by average price
 
 SELECT l.latitude, l.longitude, lc.license FROM listings l
 LEFT JOIN listings_categorical lc ON l.listing_id = lc.listing_id;
